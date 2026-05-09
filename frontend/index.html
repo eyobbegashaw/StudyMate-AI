@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyAI - Offline Study Assistant</title>
+    <link rel="stylesheet" href="styles/light.css" id="theme-stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <div class="header-left">
+                <h1 class="logo">StudyAI</h1>
+                <button id="btn-open" class="btn btn-primary" onclick="openFile()">Open File</button>
+            </div>
+            <div class="header-right">
+                <span id="update-badge" class="badge hidden" onclick="showUpdate()">Update</span>
+                <button id="btn-settings" class="btn btn-secondary" onclick="showSettings()">Settings</button>
+                <button id="btn-about" class="btn btn-secondary" onclick="showAbout()">About</button>
+            </div>
+        </header>
+
+        <!-- File Tabs (max 5) -->
+        <div class="file-tabs" id="file-tabs"></div>
+
+        <main class="main-content" id="main-panels">
+            <div class="panel panel-left" id="left-panel">
+                <div class="panel-header">
+                    <h2>AI Chat</h2>
+                    <button class="btn btn-small" onclick="clearChat()">Clear</button>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message system-message">
+                        Welcome to StudyAI! Open a document to start asking questions.
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <textarea id="chat-input" placeholder="Ask a question about your document..." onkeydown="handleInputKeydown(event)"></textarea>
+                    <button class="btn btn-primary" onclick="sendMessage()" id="send-btn">Send</button>
+                </div>
+            </div>
+
+            <div class="panel panel-right" id="right-panel">
+                <div class="panel-header">
+                    <h2>Document Viewer</h2>
+                    <span id="doc-name"></span>
+                </div>
+                <div class="pdf-viewer-container">
+                    <div class="empty-state" id="empty-viewer">
+                        <p>No document loaded</p>
+                        <p>Open a file to view it here</p>
+                    </div>
+                    <canvas id="pdf-canvas" class="hidden"></canvas>
+                    <div class="pdf-controls hidden" id="pdf-controls">
+                        <button onclick="prevPage()">Previous</button>
+                        <span id="page-info">Page 1 of 1</span>
+                        <button onclick="nextPage()">Next</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div id="settings-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Settings</h2>
+                    <button class="btn btn-icon" onclick="closeSettings()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="setting-item">
+                        <label>Theme</label>
+                        <select id="theme-select" onchange="changeTheme()">
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label>Language</label>
+                        <select id="lang-select" onchange="changeLanguage()">
+                            <option value="en">English</option>
+                            <option value="am">Amharic</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label>Swap Panels</label>
+                        <input type="checkbox" id="swap-panels" onchange="togglePanels()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="about-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>About StudyAI</h2>
+                    <button class="btn btn-icon" onclick="closeAbout()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h3>StudyAI v1.0.0</h3>
+                    <p>Offline AI-Powered Study Assistant</p>
+                    <p>Developer: Your Name</p>
+                    <button class="btn btn-primary" onclick="checkUpdatesFromAbout()">Check for Updates</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="spinner"></div>
+            <p id="loading-text">Processing...</p>
+        </div>
+        
+        <input type="file" id="file-input" accept=".docx,.pptx,.txt,.pdf" style="display:none" onchange="handleFileSelect(event)">
+        
+        <!-- Drop Zone for drag-and-drop -->
+        <div id="drop-zone" class="drop-zone hidden">
+            <div class="drop-zone-content">
+                <p>📂 Drop file here to open</p>
+                <p class="drop-hint">Supports: .docx, .pptx, .txt, .pdf</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/app.js"></script>
+    <script src="scripts/pdf-viewer.js"></script>
+    <script src="scripts/chat.js"></script>
+</body>
+</html>
